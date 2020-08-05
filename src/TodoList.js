@@ -2,21 +2,20 @@ import React, { useState } from "react";
 import NewTodoForm from "./NewTodoForm";
 import Todo from "./Todo";
 import { v4 as uuid } from "uuid";
+import { useSelector, useDispatch } from "react-redux";
 
 
 function TodoList() {
-  const [todos, setTodos] = useState([]);
+  const todos = useSelector(store => store.todos);
+  const dispatch = useDispatch();
 
+  function removeTodo(id) {
+    dispatch({type: "DELETE_TODO", id });
+  }
 
   /** Add new todo object to list. */
   const addTodo = todo => {
-    let newTodo = { ...todo, id: uuid() };
-    setTodos(todos => [...todos, newTodo]);
-  };
-
-  /** Remove todo object from list. */
-  const removeTodo = id => {
-    setTodos(todos => todos.filter(todo => todo.id !== id));
+    dispatch({type: "ADD_TODO", todo: { ...todo, id: uuid() }});
   };
 
   const todoComponents = todos.map(todo => (
